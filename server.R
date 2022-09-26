@@ -1,10 +1,10 @@
 library(data.table)
-#library(randomForest)
-library(keras)
+library(randomForest)
+#library(keras)
 
 # Read in the RF model
-#model <- readRDS("model.rds")
-model<- load_model_tf("model")
+model <- readRDS("model.rds")
+#model<- load_model_tf("model")
 
 
 shinyServer(function(input, output, session) {
