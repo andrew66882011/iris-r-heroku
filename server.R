@@ -1,10 +1,12 @@
 library(data.table)
-library(randomForest)
-#library(keras)
+#library(randomForest)
+library(keras)
 
 # Read in the RF model
-model <- readRDS("model.rds")
-#model<- load_model_tf("model")
+#model <- readRDS("model.rds")
+
+# Read in the neural network model
+model<- load_model_tf("model")
 
 
 shinyServer(function(input, output, session) {
@@ -23,14 +25,19 @@ shinyServer(function(input, output, session) {
                              input$Petal.Width)),
       stringsAsFactors = FALSE)
 
-    Species <- 0
-    df <- rbind(df, Species)
+    #Species <- 0
+    #df <- rbind(df, Species)
+    df <- rbind(df)
     input <- transpose(df)
     write.table(input,"input.csv", sep=",", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
     test <- read.csv(paste("input", ".csv", sep=""), header = TRUE)
+    # turn 'test' pure numbers
+    test <- as.matrix(test)
+    dimnames(test) <- NULL
 
-    Output <- data.frame(Prediction=predict(model,test), round(predict(model,test,type="prob"), 3))
+    # Output <- data.frame(Prediction=predict(model,test), round(predict(model,test,type="prob"), 3))
+    Output <- data.frame(Prediction=predict(model.test))
     print(Output)
 
   })
